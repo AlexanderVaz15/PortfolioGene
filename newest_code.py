@@ -1,1 +1,131 @@
+import pandas as pd
+import yfinance as yf
+from fredapi import Fred as Fed # Make sure you're importing correctly
+from datetime import datetime, timedelta
+#These next ones are for plotting:
+import plotly.graph_objects as go
+#To be able to render and output the plot correctly
+import plotly.io as pio
+import plotly.express as px
 
+# Initialize a global default for discount rate in case obtaining the information fails
+default__aaa_yield = 0.045 # 4.5%
+
+try:
+#My API key so i can access the FRED information
+    fred = Fed(api_key='a99f8e0301913988401acd5680bd2c05')  # API key as a string
+
+# Get U.S. Discount Rate series from FRED
+    interest_rate = fred.get_series('DAAA')#DAAA, FEDFUNDS
+    
+    #print("got this info", interest_rate)
+    
+    if not interest_rate.empty:
+        
+        latest_rate_date = interest_rate.last_valid_index()
+        latest_rate_value = interest_rate[latest_rate_date]
+        print(latest_rate_value)
+        
+        if latest_rate_value > 1:
+            latest_rate_value /= 100.0
+        
+    else:
+        print("Warning: Could not retrieve FEDFUNDS series. Using fallback discount rate.")
+
+except Exception:
+    print(f"Error connecting to FRED or fetching data: {Exception}")
+    print(f"Using fallback discount rate: {default__aaa_yield}")   
+
+def get_present_value(ticker: str, interest_rate2 = latest_rate_value):
+    #the interest_rate2 is 0.057
+    stock = yf.Ticker(ticker)
+    company_name = stock.info.get("longName")
+    print(company_name)
+
+    try:
+        end_date = datetime.today()
+        #start the time you are acquiring the information to 2 years ago:
+        start_date = end_date - timedelta(days = 2*365)
+
+        #Earnings-Per-Share:
+        eps = stock.info.get("trailingEps")
+
+        #Projected Future Priceof Stock:
+        current_price = stock.info.get("currentPrice")
+        future_price = stock.info.get("targetMeanPrice")
+
+        #Projected Growth-Rate:
+        growth_rate = round(float(future_price/current_price -1),4) * 100
+
+        print(f"Current AAA corporate bond yield: {(interest_rate2*100):.2f}%")
+
+        #Dividends:
+        dividends = stock.info.get("dividendYield")
+        print(dividends)
+        
+        #Two different evaluations of the stock:
+        intrinsic_value = (eps*(8.5 + 2*growth_rate)*4.4)/(interest_rate2*100)
+        present_value = (future_price + dividends)/(1 + latest_rate_value)
+
+
+        if intrinsic_value > current_price and present_value > current_price:
+            print(f"The intrinsic value of {company_name} stock is: {intrinsic_value:.2f}")
+            print(f"The present value of {company_name} stock is: {present_value:.2f}")
+            print("The stock may be undervalued, it is recommended to consider purchasing it!")
+        elif intrinsic_value < current_price and present_value < current_price:
+            print(f"The intrinsic value of {company_name} stock is: {intrinsic_value:.2f}")
+            print(f"The present value of {company_name} stock is: {present_value:.2f}")
+            print("The stock may be overvalued, it is not recommended to consider purchasing it!")
+        else:
+            print(f"The intrinsic value of {company_name} stock is: {intrinsic_value:.2f}")
+            print(f"The present value of {company_name} stock is: {present_value:.2f}")
+            print("The stock is a solid consideration under one of the two evalutations, you may want to consider buying it")
+        
+        
+        response = stock.get_news(count=10, tab='news')
+        print('News: ')
+        print(response[0]['content']['title']+':' )
+        print(response[0]['content']['summary'])
+        print(response[0]['content']['canonicalUrl']['url'])
+        
+        #download data to print out stuff:
+#         data = yf.download(ticker, start = end_date - timedelta(days =1), end = datetime.today())
+#         stock_info = pd.DataFrame(data)
+            
+#         #print(stock_info)
+#         print(f"The current closing price of your stock:\n{stock_info['High']}")
+
+        #Force it to print out the graph
+        pio.renderers.default = 'iframe'
+        data_for_graph = yf.Ticker(ticker).history(period="2y").reset_index()
+        if not data_for_graph.empty:
+            fig = px.line(data_for_graph, x = 'Date', y = 'Close', title = f'{ticker} Stock Price')
+            fig.update_layout(
+                xaxis_title = 'Date',
+                yaxis_title = 'Stock Closing Price (USD)')
+            fig.show()
+        else:
+            print("There is not enough data in the system.")
+            print("Consider rechecking the ticker symbol of the stock:")
+            print("To search for tickers, go to: https://stockanalysis.com/stocks/ ")
+            
+    except NameError:
+        print("There is not enough information on the selected stock")
+        print(f"Stock Price: {current_price}")
+        #Force it to print out the graph
+        pio.renderers.default = 'iframe'
+        
+        data_for_graph = yf.Ticker(ticker).history(period="2y").reset_index()
+        if not data_for_graph.empty:
+            fig = px.line(data_for_graph, x = 'Date', y = 'Close', title = f'{ticker} Stock Price')
+            fig.update_layout(
+                xaxis_title = 'Date',
+                yaxis_title = 'Stock Closing Price (USD)')
+            fig.show()
+            
+        response = stock.get_news(count=10, tab='news')
+        print('News:')
+        print(response[0]['content']['title']+':' )
+        print(response[0]['content']['summary'])
+        print(response[0]['content']['canonicalUrl']['url'])
+      
