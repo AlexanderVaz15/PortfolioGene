@@ -1,0 +1,21 @@
+{%extends "layout.html" %}
+
+{% block body %}
+
+<h1>Mock Investment Recommendations</h1>
+<h2>Your Input:</h2>
+<p><strong>Risk Tolerance:</strong> {{ risk_tolerance }}</p>
+<p><strong>Price Range:</strong> {{ price_range }}</p>
+<p><strong>Dividend Rate:</strong> {{ dividend_rate }}</p>
+<p><strong>Sector Exclusion:</strong> {{sector_exclusion}}</p>
+
+<h2>Suggested Stocks:</h2>
+<ol>
+    {% for stock in stock_output %}
+    <li>{{ stock }}</li>
+    {% endfor %}
+</ol>
+
+<a href="/"><button type="button">Back to Start</button></a>
+
+{%endblock%}

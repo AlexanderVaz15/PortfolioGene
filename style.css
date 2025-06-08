@@ -1,0 +1,86 @@
+/* style.css */
+
+/* Base */
+body {
+    /* Sets the text on screen to the first possible option (left to right)*/
+    font-family: 'Segoe UI', Verdana, 'Times New Roman', Times, sans-serif;
+    /*Removes all of the space between the edge of the body and the edge of the window.
+    This allows the full page to be used for the content */
+    margin: 0;
+    /* Removes any free space from the content of the page and the edge of the body */
+    padding: 0;
+    background: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), /*line mad ewith ChatGPT(7 June 2025) to make image transparent so reading is easier*/
+    url("/static/images/pexels-clickerhappy-9660.jpg");
+    /* Makes the image cover the entire screen */
+    background-size: cover;  
+    /* Assures the image appears only once to fill the whole bacj=kground as desired */          
+    background-repeat: no-repeat;      
+    background-position: center;
+    /* Ensures the backgound image is fixed and does not move aas the user scrolls*/
+    background-attachment: fixed;
+    /* Color of text on screen */
+    color: #0a0a0a;
+}
+
+/* Page Container */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Footer Style */
+footer {
+    text-align: center;
+
+    margin-top: 4rem;
+    /* 1 rem refers to 16 pixels separating the fotter from the main page */
+    padding: 2rem 0;
+    color: #686666;
+    /*Small copyright text has font of 0.8 * 16 pixels*/
+    font-size: 0.8rem;
+    /* The line that borders the padding and the main page */
+    border-top: 1px solid #f5f1f1;
+}
+
+/* Sets the text color of th eheading to this: */
+h1, h2, h3, h5 {
+    color: #1a202c;
+}
+
+/* Buttons */
+button, .btn {
+    background-color: #3b9235;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+button:hover, .btn:hover {
+    background-color: #861ab8;
+}
+
+
+/* THESE TWO BLOCKS DONT CURRENTLY DO ANYTHING SO CONSIDER ERASING THEM*/
+/* Cards for recommended stocks or news */
+.card {
+    background: white;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Navigation Bar (Optional if you add one) */
+.navbar {
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

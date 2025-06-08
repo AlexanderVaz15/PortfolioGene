@@ -1,0 +1,49 @@
+{%extends "layout.html" %}
+
+{% block body %}
+
+<h1>Ticker: {{ticker}}</h1>
+<p><strong>Stock Evaluation:</strong></p>
+{% for item in value %}
+
+<li>
+    {{item}}
+</li>
+
+{% endfor %}
+
+<p><strong>Latest News:</strong> <em>{{ news[0] }}</em> <br>{{ news[1] }} <br></p>
+<a href="{{ news[2] }}" target="_blank">News Article</a>
+<!-- <p><strong>Stock Price Graph:</strong> {{ dividend_rate }}</p> -->
+
+
+
+<h2>{{ticker}} Price Chart</h2>
+    <!--Container where the actual plot will appear-->
+    <div id="stock-graph"></div>
+
+    <!-- Store JSON safely -->
+     
+<!-- I asked ChatGPT (7 June 2025) How to upload a json file into html-->
+ <!-- this line of code created an identification for the graph that will be accessed by javascript code soon after, and the type is specified
+  as a JSON applicatioon so the computer knows we are talking about JSON data and not executable javascript code-->
+  <!-- Line 35 injects the JSON data which is the plotly graph into the html in a "safe" manner -->
+   <!--"|safe" refers to telling Jinja to stay between quotes and brackets to not break JSON-->
+    <script id="graph-data" type="application/json"> 
+        {{ graphJSON | safe }}
+    </script>
+    <!--The next four lines were created by ChatGPT on 7 June 2025-->
+    <script>
+        
+        //This is now javascript in order to parse the data and be able to show it in the screen
+        const graphData = JSON.parse(document.getElementById('graph-data').textContent);
+        Plotly.newPlot('stock-graph', graphData.data, graphData.layout); //find "graph-data" and use the parsed JSON data to fill in the information
+        //the data and layout of the graph are turned into a visual from JSON text file
+    </script>
+
+<br><br>
+<a href="/stockapp"><button type="button">Search Again</button></a>
+<br><br><br><br>
+<a href="/"><button type="button">Back to Start</button></a>
+
+{%endblock%}

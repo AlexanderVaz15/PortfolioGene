@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>InvestoGene</title>
+		<!--This line was created by ChatGPT (7 June 2025), it loads the Plotly Javascript library so it can be used on the lookup_res page -->
+		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> <!-- Asked ChatGPT how to link css file to my main layout (7 June 2025)-->
+	</head> 
+
+
+	<body>
+		<!-- Take all of my html files and place them here inbetween jinja code, and just use the sturcture of this file-->
+		<div class="container">
+			{% block body %}{% endblock %}
+		</div>
+
+
+
+		<footer>
+			<hr>
+			<small>
+				&copy; Alexander Vazquez, 2025
+			</small>
+		</footer>
+
+	</body>
+
+</html>

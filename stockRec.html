@@ -1,0 +1,61 @@
+{%extends "layout.html" %}
+
+{% block body %}
+
+<header>
+    <h1>Please fill out the required information:</h1>
+</header>
+
+<main>
+    <form method="GET" action="/result"> <!--this is to make sure results take you to the results html page i made-->
+        <h2>1. Please select you level of risk tolerance:</h2>
+        <p><strong>Hint:</strong> Ask yourself, "how much do I value financial certainty?" (Many people prefer low risk)</p>
+        <ul> 
+            {% for item in risk_levels %}
+            <li>
+                <input type="radio" name="risk_tolerance" value="{{item}}">{{item}}
+            </li>
+            {%endfor%}
+        </ul>
+
+
+        <h2>2. Please select your price range below:</h2>
+        <ul>
+            {% for item2 in price_range %}
+            <li>
+                <input type="radio" name="price_range" value="{{item2}}">{{item2}}
+            </li>
+            {%endfor%}
+        </ul>
+
+        <h2>3. Please select your desired dividend rate:</h2>
+        <p><em>Dividend Rate:</em> Annual distribution of money to shareholders. <br> 
+        Benefit: Immediate compensation for owning stock. <br>
+        Cost: Funds intended for company expansion are distributed which may slow down potential grow.</p>
+        <ul>
+            {% for item3 in dividend_rate %}
+            <li>
+                <input type="radio" name="dividend_rate" value="{{item3}}">{{item3}}
+            </li>
+            {% endfor %}
+        </ul>
+
+        <h2>4. Please enter any sector exclusions (*optional):</h2>
+        <p><em>Example:</em> An individual with strong devotion to fighting climate change may avoid supporting coal mining companies.</p>
+        <input type="text" name="sector_exclusions" placeholder="e.g. Finance, Energy">
+        <br><br><br>
+        <button type="Submit">Get Recommendations</button>
+
+
+       <!-- <a href="{{url_for('stock_results')}}"> 
+            
+            This is a submit button so it will not take you to another website correctly
+            the other types of buttons that do are the ones just called "button"
+        </a>-->
+
+    </form>
+
+</main>
+
+
+{%endblock%}

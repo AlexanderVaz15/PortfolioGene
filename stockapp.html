@@ -1,0 +1,26 @@
+{%extends "layout.html" %}
+<!--This is the file for looking up the stock value-->
+{% block body %}
+
+<header>
+    <h1>Stock Evaluations</h1>
+</header>
+<h2>Feel free to search any ticker symbol:</h2>
+<p><em>Ticker:</em> a unique set of letters assigned to a publicly traded company's stock.</p>
+
+<h4>Here is a list of all possible ticker symbols:</h4>
+<a href="https://stockanalysis.com/stocks/" target="_blank">Take me to the List!</a>
+
+<br><br>
+<form method="GET" action="/lookup_res">
+    <h2>Search it!</h2>
+    <input type="text" name="ticker" placeholder="e.g. AAPL">
+    <br><br>
+
+    <button type="submit">Get Evaluation</button>
+
+</form>
+
+
+
+{%endblock%}
